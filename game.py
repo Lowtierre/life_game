@@ -1,7 +1,10 @@
+import random
+
 class Cell():
-    def __init__(self, x, y):
+    def __init__(self, x, y, life):
         self.x = x
         self.y = y
+        self.is_alive = life
         self.neighbors = []
 
     def __repr__(self):
@@ -16,18 +19,36 @@ class Cell():
 
 cells = []
 
-l = 3
+l = 30
 
 # create cells grid
 
 for i in range(l):
     cells += [[]]
     for j in range(l):
-        cell = Cell(i, j)
-        cells[i] += [cell]
+        p = random.randrange(0, 10)
+        if p >= 5:
+            cell = Cell(i, j, True)
+            cells[i] += [cell]
+        else:
+            cell = Cell(i, j, False)
+            cells[i] += [cell]
+
 
 # create neighborhood binds
 
 for i in range(l):
     for j in range(l):
         cells[i][j].know_neighbors()
+
+# create terminal grid
+grid = ''
+for i in range(l):
+    row = ''
+    for j in range(l):
+        if cells[j][i].is_alive:
+            row += '* '
+        else:
+            row += '^ '
+    grid += '\n' + row
+print(grid)
