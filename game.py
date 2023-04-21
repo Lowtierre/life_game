@@ -1,41 +1,16 @@
 import random
 import time
+from welcome import game_features
+from cell_class import Cell
 
-class Cell():
-    def __init__(self, x, y, life):
-        self.x = x
-        self.y = y
-        self.is_alive = life
-        self.will_live = life
-        self.neighbors = []
-
-    def __repr__(self):
-        return f"cell({self.x},{self.y})"
-    
-    def know_neighbors(self):
-        for i in range(-1, 2):
-            for j in range(-1, 2):
-                if (self.x + i >= 0 and self.x + i < l) and (self.y + j >= 0 and self.y + j < l) and (i != 0 or j != 0):
-                    self.neighbors += [cells[self.x + i][self.y + j]]
-        print(f"The neighbors of cell({self.x},{self.y}) are: {self.neighbors}")
-
-    def live_or_die(self):
-        count = 0
-        for neighbor in self.neighbors:
-            if neighbor.is_alive:
-                count += 1
-        if self.is_alive:
-            if count < 2 or count > 3:
-                self.will_live = False
-        else:
-            if count == 3:
-                self.will_live = True
-
+# cell list
 
 cells = []
 
-l = 5
-t = 5
+# game parameters
+
+l = int(game_features['dim'])
+t = int(game_features['time'])
 
 # create cells grid
 
@@ -50,12 +25,21 @@ for i in range(l):
             cell = Cell(i, j, False)
             cells[i] += [cell]
 
+initial_cells = cells
+
+# function for neighborhood
+
+def know_neighbors(cell):
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if (cell.x + i >= 0 and cell.x + i < l) and (cell.y + j >= 0 and cell.y + j < l) and (i != 0 or j != 0):
+                cell.neighbors += [cells[cell.x + i][cell.y + j]]
 
 # create neighborhood binds
 
 for i in range(l):
     for j in range(l):
-        cells[i][j].know_neighbors()
+        know_neighbors(cells[i][j])
 
 # create terminal grid
 
@@ -68,18 +52,23 @@ def draw_grid():
         row = ''
         for j in range(l):
             if cells[j][i].is_alive:
-                row += '* '
+                row += ' A  '
             else:
-                row += '^ '
-        grid += '\n' + row
+                row += ' D  '
+        grid += '\n\n' + row
     print(grid)
 
 # create simulation
 
-for i in range(t):
+for m in range(t):
     time.sleep(1)
     for i in range(l):
         for j in range(l):
             cells[i][j].live_or_die()
+    print(f"\n\nGeneration {m}:")
     draw_grid()
-    
+
+# save game 
+
+with open(f"saved_games/{l}dim_{t}time.txt", "w") as game1:
+    game1.write((str(initial_cells)))
