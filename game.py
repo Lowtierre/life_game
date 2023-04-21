@@ -11,21 +11,20 @@ cells = []
 
 l = int(game_features['dim'])
 t = int(game_features['time'])
+p = int(game_features['percent'])
 
 # create cells grid
-
-for i in range(l):
-    cells += [[]]
-    for j in range(l):
-        p = random.randrange(0, 10)
-        if p >= 5:
-            cell = Cell(i, j, True)
-            cells[i] += [cell]
-        else:
-            cell = Cell(i, j, False)
-            cells[i] += [cell]
-
-initial_cells = cells
+def create_grid(dim, percent, cell_list):
+    for i in range(dim):
+        cell_list += [[]]
+        for j in range(dim):
+            d = random.randrange(1, 11)
+            if d <= percent:
+                cell = Cell(i, j, True)
+                cell_list[i] += [cell]
+            else:
+                cell = Cell(i, j, False)
+                cell_list[i] += [cell]
 
 # function for neighborhood
 
@@ -36,39 +35,45 @@ def know_neighbors(cell):
                 cell.neighbors += [cells[cell.x + i][cell.y + j]]
 
 # create neighborhood binds
-
-for i in range(l):
-    for j in range(l):
-        know_neighbors(cells[i][j])
+def create_binds(dim):
+    for i in range(dim):
+        for j in range(dim):
+            know_neighbors(cells[i][j])
 
 # create terminal grid
 
 def draw_grid():
     for i in range(l):
         for j in range(l):
-            cells[i][j].is_alive = cells[i][j].will_live
+            cells[j][i].is_alive = cells[j][i].will_live
     grid = ''
     for i in range(l):
         row = ''
         for j in range(l):
-            if cells[j][i].is_alive:
-                row += ' A  '
+            if cells[i][j].is_alive == True:
+                row += f' A  '
             else:
-                row += ' D  '
+                row += f' D  '
         grid += '\n\n' + row
     print(grid)
 
 # create simulation
+create_grid(l, p, cells)
+initial_cells = cells
+
+create_binds(l)
 
 for m in range(t):
     time.sleep(1)
     for i in range(l):
         for j in range(l):
+            if m == 0:
+                continue
             cells[i][j].live_or_die()
     print(f"\n\nGeneration {m}:")
     draw_grid()
 
 # save game 
 
-with open(f"saved_games/{l}dim_{t}time.txt", "w") as game1:
+with open(f"saved_games/{l}dim_simulation.txt", "w") as game1:
     game1.write((str(initial_cells)))
