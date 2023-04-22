@@ -1,4 +1,5 @@
 import os
+import re
 from game import *
 
 cells = []
@@ -45,12 +46,29 @@ while new_or_old.lower() != 'n' or new_or_old.lower() != 'o':
     for file in saved_files:
         print(file)
     name = input("\nWrite the name of the file you want to open (without '.txt'). ")
-    l = open_file(name, cells)
-    time_game = input("\nHow many generations do you want to see? ")
-    t = int(time_game)
-    create_binds(cells, l)
-    simulation(l, t, cells)
-    print("\n The simulation is over! See you soon! ")
+    while f"{name}" not in saved_files:
+      if f"{name}.txt" in saved_files:
+        l = open_file(name, cells)
+        time_game = input("\nHow many generations do you want to see? ")
+        i = 0
+        while re.search('\D+', time_game):
+          while i > 0:
+            time_game = input(">> ")
+            break
+          i += 1
+          if not re.search('\D+', time_game):
+            t = int(time_game)
+            break
+          else:
+            print("\nYou must enter a number. ")
+            continue
+           
+        create_binds(cells, l)
+        simulation(l, t, cells)
+        break
+      else:
+        name = input("Doesn't exist this file, re-write in a correct way! ")
+    print("\nThe simulation is over! See you soon! ")
     break
   else:
       new_or_old = input("Should you press 'N' or 'O'. ")
