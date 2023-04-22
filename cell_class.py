@@ -1,7 +1,3 @@
-from welcome import game_features
-
-l = int(game_features['dim'])
-
 class Cell():
     def __init__(self, x, y, life):
         self.x = x
@@ -11,7 +7,10 @@ class Cell():
         self.neighbors = []
 
     def __repr__(self):
-        return f"cell({self.x},{self.y})"
+        if self.is_alive:
+            return f"({self.x},{self.y},I)"
+        else:
+            return f"({self.x},{self.y},O)"
 
     def live_or_die(self):
         count = 0
