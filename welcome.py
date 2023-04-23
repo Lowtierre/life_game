@@ -31,7 +31,7 @@ while new_or_old.lower() != 'n' or new_or_old.lower() != 'o':
 
     print(f"\nPerfect, {user_name}, this simulation will be in a {grid_dim}-dimension grid and its durate will be of {time_game} generations.")
     # create simulation
-    create_grid(l, t, cells)
+    create_grid(l, p, cells)
     grid_code = write_init_grid(l, cells)
     create_binds(cells, l)
     simulation(l, t, cells)

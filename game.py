@@ -3,7 +3,9 @@ import time
 from cell_class import Cell
 
 # create cells grid
+# percent e la calcoli sulla dimensione della matrice e ottieni un numero interi di elemnti sicuramente vivi
 def create_grid(dim, percent, cell_list):
+    # random.seed()
     for i in range(dim):
         cell_list += [[]]
         for j in range(dim):
